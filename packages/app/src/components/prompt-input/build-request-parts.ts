@@ -97,7 +97,8 @@ export function buildRequestParts(input: BuildRequestPartsInput) {
     },
   ]
 
-  const files = input.prompt.filter(isFileAttachment).map((attachment) => {
+  const isImageAttachment = (part: Prompt[number]): part is ImageAttachmentPart => part.type === "image"
+  const files = input.prompt.filter(p => !isImageAttachment(p) && isFileAttachment(p)).map((attachment) => {
     const path = absolute(input.sessionDirectory, attachment.path)
     return {
       id: Identifier.ascending("part"),
